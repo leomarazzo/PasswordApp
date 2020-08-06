@@ -1,10 +1,12 @@
 {
   "expo": {
     "name": "PaswordApp",
+    "description": "Aplicacion para almacenamiento seguro de contraseñas",
     "slug": "PaswordApp",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "githubUrl": "https://github.com/leomarazzo/PasswordApp",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,11 +26,17 @@
     },
     "android": {
       "package": "com.passwordApp",
+      "adaptiveIcon": {
+        "backgroundColor": "#8c8b8b",
+        "foregroundImage": "./assets/icon.png"
+      },
       "versionCode": 1,
+      "permissions": [],
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-1461193511253828~5983027293"
+        "googleMobileAdsAppId": "ca-app-pub-1461193511253828~5983027293",
+        "googleMobileAdsAutoInit": true
       }
-    },
-    "description": ""
+    }
+    
   }
 }
