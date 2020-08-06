@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   checkbox: {
     marginTop: 30,
     flexDirection: "row",
+    alignItems: "flex-end",
     marginHorizontal: 10,
   },
   password: {
@@ -79,6 +80,7 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header
+        containerStyle={{ marginBottom: 30, backgroundColor: "#8c8b8b" }}
         leftComponent={{
           icon: "menu",
           color: "#fff",
@@ -87,7 +89,7 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
           },
         }}
         centerComponent={{
-          text: "Mis contraseñas",
+          text: "Generador de contraseña",
           style: { color: "#fff", fontSize: 20 },
         }}
       />

@@ -6,7 +6,7 @@ export const encriptPassword = (password: string, secret: string): string => {
     const ciphertext = AES.encrypt(password, secret).toString();
     return ciphertext;
   } catch (err) {
-    console.log(err);
+    
     return "";
   }
 };
@@ -20,7 +20,7 @@ export const decriptPassword = (
     var plaintext = bytes.toString(enc.Utf8);
     return plaintext;
   } catch (error) {
-    console.log(error);
+    
     return "";
   }
 };

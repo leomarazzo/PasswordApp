@@ -5,6 +5,10 @@ import { Input, Header, Button } from "react-native-elements";
 import PasswordInput from "../Common/PasswordInput";
 import { LogedInContext } from "../stores/LogedInStorage";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import {
+  useFonts,
+  CarroisGothic_400Regular,
+} from "@expo-google-fonts/carrois-gothic";
 
 type ParamList = {
   Passwords: undefined;
@@ -21,6 +25,7 @@ interface IProps {
 }
 
 const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({ CarroisGothic_400Regular });
   const {
     currentLogin,
     createLogin,
@@ -39,6 +44,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
   const [errorPassword, seterrorPassword] = useState("");
 
   const validatIdentificador = () => {
+    
     if (!identificador) {
       seterrorIdentificador(
         "Debe colocar un nombre para guardar la contraseña"
@@ -117,18 +123,19 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
   return (
     <View>
       <Header
-        containerStyle={{ marginBottom: 20 }}
-        leftComponent={{
-          icon: "menu",
-          color: "#fff",
-          onPress: () => {
-            navigation.openDrawer();
-          },
-        }}
+        containerStyle={{ marginBottom: 30, backgroundColor: "#8c8b8b" }}
+        
         centerComponent={{
           text:
             currentLogin !== null ? "Editar contraseña" : "Nueva constraseña",
-          style: { color: "#fff", fontSize: 20 },
+          style: [
+            fontsLoaded
+              ? {
+                  fontSize: 20,
+                  fontFamily: "CarroisGothic_400Regular",
+                }
+              : { fontSize: 20 },
+          ],
         }}
       />
       <Input
@@ -194,6 +201,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
       <Button
         buttonStyle={{ marginVertical: 15, marginHorizontal: 20 }}
         title="Salir"
+        type="outline"
         onPress={() => setLoginForm(false)}
       />
 

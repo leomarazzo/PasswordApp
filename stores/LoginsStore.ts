@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { ILogin } from "../Models/Login";
 import { createContext } from "react";
 import 'mobx-react-lite/batchingForReactNative'
@@ -10,6 +10,11 @@ class LoginsStore {
   @observable currentLogin: ILogin | null = null;
   @observable loginForm: boolean = false;
 
+
+  @computed get sortedLogins() {
+    return (this.logins.sort((a, b) => (a.nombre > b.nombre) ? 1 : ((a.nombre < b.nombre) ?  -1 : 0)));
+  }
+
   @action createLogin = (login: ILogin, encpassword: string) => {
     const password = encriptPassword(login.password, encpassword);
     const {nombre, link, username} = login
@@ -20,10 +25,10 @@ class LoginsStore {
 
   @action loadLogins = (results: any) => {
     const resultset = (results as ILogin[])
+    this.logins = [];
     resultset.map((e) => {
       this.logins.push(e);
     })
-    console.log(results);
   }
 
   @action setCurrentLogin = (nombre: string, encpassword: string) => {

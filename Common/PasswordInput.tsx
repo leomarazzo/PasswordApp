@@ -1,17 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import {Icon, Input} from "react-native-elements";
-import { onChange } from 'react-native-reanimated';
+import { StyleSheet, View } from 'react-native'
+import {Icon, Input, InputProps} from "react-native-elements";
 
-interface IProps {
-    label: string,
-    value?: string,
-    defaultValue?: string,
-    onEndEditing?: () => void,
-    onChangeText: (value: string) => void
+interface IProps extends InputProps {  
 }
 
-const PasswordInput: React.FC<IProps> = ({label, onChangeText, value, onEndEditing, defaultValue}) => {
+const PasswordInput: React.FC<IProps> = ({...rest}) => {
     const [icon, setIcon] = useState("lock")
     const [password, setpassword] = useState(true)
 
@@ -30,12 +24,8 @@ const PasswordInput: React.FC<IProps> = ({label, onChangeText, value, onEndEditi
             <Input
                 secureTextEntry={password}
                 placeholder="Contraseña"
-                label={label}
-                onEndEditing={onEndEditing}
                 autoCapitalize="none"
-                onChangeText={(value) => onChangeText(value)}
-                defaultValue={defaultValue}
-                value={value}
+                {...rest}
                 rightIcon={
                 <Icon 
                     name={icon}

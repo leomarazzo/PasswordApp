@@ -1,23 +1,26 @@
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import {
   StyleSheet,
-  TouchableOpacity,
-  Text,
   View,
-  FlatList,
+  Platform
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { LoginsContext } from "../stores/LoginsStore";
-import { Header, Button, Icon, ListItem } from "react-native-elements";
+import { Header, ListItem } from "react-native-elements";
 import CreateEditLogin from "./LoginForm";
 import ActionButton from "react-native-action-button";
 import { openDatabase } from "expo-sqlite";
 import { LogedInContext } from "../stores/LogedInStorage";
+import {
+  useFonts,
+  CarroisGothic_400Regular,
+} from "@expo-google-fonts/carrois-gothic";
 
 type ParamList = {
   Passwords: undefined;
   PasswordGen: undefined;
+  Info: undefined;
 };
 
 type PasswordStackScreenNavigationProp = DrawerNavigationProp<
@@ -30,10 +33,16 @@ interface IProps {
 }
 
 const PasswordList: React.FC<IProps> = ({ navigation }) => {
-  const { logins, loginForm, setLoginForm, loadLogins, setCurrentLogin } = useContext(
-    LoginsContext
-  );
-  const {UnlockPassword} = useContext(LogedInContext);
+  const [fontsLoaded] = useFonts({ CarroisGothic_400Regular });
+
+  const {
+    sortedLogins,
+    loginForm,
+    setLoginForm,
+    loadLogins,
+    setCurrentLogin,
+  } = useContext(LoginsContext);
+  const { UnlockPassword } = useContext(LogedInContext);
 
   useEffect(() => {
     const db = openDatabase("passwords");
@@ -43,12 +52,15 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
         loadLogins(resultset);
       })
     );
+     
+    
   }, []);
 
   if (!loginForm) {
     return (
       <View style={styles.container}>
         <Header
+          containerStyle={{ backgroundColor: "#8c8b8b" }}
           leftComponent={{
             icon: "menu",
             color: "#fff",
@@ -58,14 +70,27 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
           }}
           centerComponent={{
             text: "Mis contraseñas",
-            style: { color: "#fff", fontSize: 20 },
+            style: [
+              fontsLoaded
+                ? {
+                    fontSize: 20,
+                    fontFamily: "CarroisGothic_400Regular",
+                  }
+                : { fontSize: 20 },
+            ],
           }}
         />
-        {logins.map((l) => (
+        
+        {sortedLogins.map((l, i) => (
           <ListItem
             key={l.nombre}
             title={l.nombre}
-            onPress={(e) => setCurrentLogin(l.nombre, UnlockPassword!)}
+            containerStyle={[
+              i % 2 == 0
+                ? { backgroundColor: "#ebe8e8" }
+                : { backgroundColor: "#969696" },
+            ]}
+            onPress={() => setCurrentLogin(l.nombre, UnlockPassword!)}
           />
         ))}
         <ActionButton

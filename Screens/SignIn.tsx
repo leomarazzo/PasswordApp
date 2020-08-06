@@ -1,50 +1,99 @@
-import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { observer } from "mobx-react-lite";
 import { LogedInContext } from "../stores/LogedInStorage";
 import { checkUnlockPassword } from "../Utils/UnlockPassword";
 import { Button } from "react-native-elements";
 import PasswordInput from "../Common/PasswordInput";
+import { AdMobInterstitial } from "expo-ads-admob";
+import {
+  useFonts,
+  CarroisGothic_400Regular,
+} from "@expo-google-fonts/carrois-gothic";
 
 const SignIn = () => {
+  const [fontsLoaded] = useFonts({ CarroisGothic_400Regular });
   const logedInStorage = useContext(LogedInContext);
   const { setUnlockPassword } = logedInStorage;
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  useEffect(() => {
+    const showAdd = async () => {
+      const unitID =
+        Platform.OS == "ios"
+          ? "ca-app-pub-1461193511253828/4245605492"
+          : "ca-app-pub-1461193511253828/2164854173";
+      AdMobInterstitial.setAdUnitID(unitID);
+      await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: false });
+      await AdMobInterstitial.showAdAsync();
+    };
+
+    showAdd();
+  }, []);
+
   const checkPassword = () => {
     if (password.length > 0) {
-      if (checkUnlockPassword(password)) {
-        setUnlockPassword(password);
-      } else {
-        setPasswordError("Contraseña incorrecta")
-      }
+      checkUnlockPassword(password).then(res => {
+        if (res) {
+          setUnlockPassword(password);
+        } else {
+          setPasswordError("Contraseña incorrecta");
+        }
+      })
+      
     }
   };
 
   return (
     <View style={styles.container}>
-      <PasswordInput label="Ingrese la contraseña" onChangeText={(value) => setPassword(value)}/>
-      <Button style={{borderRadius:200}} disabled={!(password.length >= 8)} title="Ingresar" type="outline" onPress={() => checkPassword()} />
+      <Text
+        style={[fontsLoaded ?  {
+          fontSize: 20,
+          marginTop: 100,
+          alignContent: "center",
+          textAlign: "center",
+          fontFamily: "CarroisGothic_400Regular"
+        } : {
+          fontSize: 20,
+          marginTop: 100,
+          alignContent: "center",
+          textAlign: "center",
+        }]}
+      >
+        Bienvenido a PasswordApp
+      </Text>
+      <PasswordInput
+        label="Ingrese la contraseña"
+        onChangeText={(value) => setPassword(value)}
+      />
+      {passwordError ? (
+        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
+          {passwordError}
+        </Text>
+      ) : null}
+      <Button
+        containerStyle={{
+          width: "75%",
+          alignSelf: "center",
+          marginTop: 30,
+          borderRadius: 300,
+        }}
+        buttonStyle={{ backgroundColor: "#00ba69" }}
+        disabled={!(password.length >= 8)}
+        title="Ingresar"
+        type="solid"
+        onPress={() => checkPassword()}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
-    flexDirection: "column",
-    justifyContent: "center",
+    flex: 5,
     alignContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    flex: 2,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 20,
-    margin: 10,
+    justifyContent: "space-evenly",
   },
 });
 

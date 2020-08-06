@@ -1,12 +1,24 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import { observer } from "mobx-react-lite";
 import { LogedInContext } from "../stores/LogedInStorage";
 import { Button } from "react-native-elements";
 import PasswordInput from "../Common/PasswordInput";
 import { setUnlockPassword as setPWD } from "../Utils/UnlockPassword";
+import {
+  useFonts,
+  CarroisGothic_400Regular,
+} from "@expo-google-fonts/carrois-gothic";
 
 const SignUp = () => {
+  const [fontsLoaded] = useFonts({ CarroisGothic_400Regular });
   const logedInStorage = useContext(LogedInContext);
   const { setUnlockPassword } = logedInStorage;
   const [password, setpassword] = useState("");
@@ -24,7 +36,7 @@ const SignUp = () => {
       setErrorPassword(
         "La contraseña maestra debe tener como minimo 8 caracteres, 1 mayuscula, 1 minuscula, 1 digito y un simbolo"
       );
-    }else{
+    } else {
       setErrorPassword("");
     }
   };
@@ -32,7 +44,7 @@ const SignUp = () => {
   const evaluateConfirm = () => {
     if (password != confirm) {
       setErrorConfirm("Las contraseñas deben coincidir");
-    }else{
+    } else {
       setErrorConfirm("");
     }
   };
@@ -49,29 +61,52 @@ const SignUp = () => {
   return (
     <View style={styles.container}>
       <Text
-        style={{
-          fontSize: 20,
-          marginTop: 40,
-          alignContent: "center",
-          textAlign: "center",
-        }}
+        style={[
+          fontsLoaded
+            ? {
+                fontSize: 20,
+                marginTop: 100,
+                marginBottom: 15,
+                alignContent: "center",
+                textAlign: "center",
+                fontFamily: "CarroisGothic_400Regular",
+              }
+            : {
+                fontSize: 20,
+                marginTop: 100,
+                alignContent: "center",
+                textAlign: "center",
+              },
+        ]}
       >
         Bienvenido a PasswordApp
       </Text>
       <Text
-        style={{
-          fontSize: 15,
-          marginTop: 0,
-          alignContent: "center",
-          textAlign: "center",
-        }}
+        style={[
+          fontsLoaded
+            ? {
+                fontSize: 20,
+                marginBottom: 30,
+                alignContent: "center",
+                textAlign: "center",
+                fontFamily: "CarroisGothic_400Regular",
+              }
+            : {
+                fontSize: 20,
+                alignContent: "center",
+                textAlign: "center",
+              },
+        ]}
       >
         Antes de empezar debes establecer tu contraseña maestra
       </Text>
       <PasswordInput
         label="Ingrese la contraseña"
         onEndEditing={() => evaluatePassword()}
-        onChangeText={(value) => {setpassword(value); evaluatePassword()}}
+        onChangeText={(value) => {
+          setpassword(value);
+          evaluatePassword();
+        }}
       />
       {errorPassword ? (
         <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
@@ -81,7 +116,9 @@ const SignUp = () => {
       <PasswordInput
         label="Confirme la contraseña"
         onEndEditing={() => evaluateConfirm()}
-        onChangeText={(value) => {setconfirm(value)}}
+        onChangeText={(value) => {
+          setconfirm(value);
+        }}
       />
       {errorConfirm ? (
         <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
@@ -89,10 +126,16 @@ const SignUp = () => {
         </Text>
       ) : null}
       <Button
-        style={{ borderRadius: 200, marginBottom: 30 }}
+        containerStyle={{
+          width: "75%",
+          alignSelf: "center",
+          marginTop: 30,
+          borderRadius: 300,
+        }}
+        buttonStyle={{ backgroundColor: "#00ba69" }}
         disabled={!password || !!errorPassword || !!errorConfirm}
         title="Inciar"
-        type="outline"
+        type="solid"
         onPress={() => register()}
       />
     </View>
@@ -105,6 +148,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 5,
     alignContent: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
 });

@@ -8,7 +8,7 @@ export const startDatabaseIfNot = () => {
       [],
       () => {},
       (_, error) => {
-        console.log(error);
+        
         return false;
       }
     )
@@ -28,7 +28,7 @@ export const addPassword = (
       [nombre, link, username, password],
       () => {},
       (_, error) => {
-        console.log(error);
+        
         return false;
       }
     )
@@ -48,7 +48,7 @@ export const updatePassword = (
       [link, username, password, nombre],
       () => {},
       (_, error) => {
-        console.log(error);
+        
         return false;
       }
     )
@@ -63,7 +63,7 @@ export const removePassword = (nombre: string) => {
       [nombre],
       () => {},
       (_, error) => {
-        console.log(error);
+        
         return false;
       }
     )

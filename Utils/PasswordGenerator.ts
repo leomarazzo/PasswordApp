@@ -106,7 +106,7 @@ export const generatePassword = (
       return password;
     }
   } catch (err) {
-    console.log(err);
+    
   }
   return "";
 };

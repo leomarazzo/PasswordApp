@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import PasswordGenerate from "./Screens/PasswordGenerate";
 import { NavigationContainer } from "@react-navigation/native";
 import PasswordList from "./Screens/PasswordList";
@@ -10,11 +10,13 @@ import { observer } from "mobx-react-lite";
 import { LogedInContext } from "./stores/LogedInStorage";
 import { isSet } from "./Utils/UnlockPassword";
 import { startDatabaseIfNot } from "./Utils/DatabaseAccess";
-import { openDatabase } from "expo-sqlite";
+import { Icon } from "react-native-elements";
+import info from "./Screens/Info";
 
 export type RootDrawerParamList = {
   Passwords: undefined;
   PasswordGen: undefined;
+  Info: undefined
 };
 
 const App = () => {
@@ -36,12 +38,22 @@ const App = () => {
           <Drawer.Screen
             name="Passwords"
             component={PasswordList}
-            options={{ title: "Mis contraseñas" }}
+            options={{ title: "Mis contraseñas", drawerIcon: props=> 
+              <Icon name="lock"/>
+            }}
+
           />
           <Drawer.Screen
             name="PasswordGen"
             component={PasswordGenerate}
-            options={{ title: "Generador de contraseñas" }}
+            options={{ title: "Generador de contraseñas", drawerIcon: props=> 
+            <Icon name="create"/> }}
+          />
+          <Drawer.Screen
+            name="Info"
+            component={info}
+            options={{ title: "Info", drawerIcon: props=> 
+            <Icon name="info"/> }}
           />
         </Drawer.Navigator>
       </NavigationContainer>
