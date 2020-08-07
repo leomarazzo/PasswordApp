@@ -1,19 +1,18 @@
 import * as React from "react";
 import {
   StyleSheet,
-  CheckBox,
   Image,
   Clipboard,
   View,
   Text,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { useState } from "react";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { Header } from "react-native-elements";
 import InputSpinner from "react-native-input-spinner";
 import { generatePassword } from "../Utils/PasswordGenerator";
+import {Checkbox} from "react-native-paper"
 
 type ParamList = {
   Passwords: undefined;
@@ -94,19 +93,19 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
         }}
       />
       <View style={styles.checkbox}>
-        <CheckBox value={mayus} onValueChange={setMayus} />
+        <Checkbox status={mayus ? 'checked' : 'unchecked'} onPress={() => setMayus(!mayus)} />
         <Text style={{ fontSize: 20 }}>¿Incluir mayusculas?</Text>
       </View>
       <View style={styles.checkbox}>
-        <CheckBox value={minus} onValueChange={setMinus} />
+        <Checkbox status={minus ? 'checked' : 'unchecked'} onPress={() => setMinus(!minus)} />
         <Text style={{ fontSize: 20 }}>¿Incluir minusculas?</Text>
       </View>
       <View style={styles.checkbox}>
-        <CheckBox value={nums} onValueChange={setNums} />
+        <Checkbox status={nums ? 'checked': 'unchecked'} onPress={() => setNums(!nums)} />
         <Text style={{ fontSize: 20 }}>¿Incluir números?</Text>
       </View>
       <View style={styles.checkbox}>
-        <CheckBox value={simbolos} onValueChange={setSimbolos} />
+        <Checkbox status={simbolos ? 'checked': 'unchecked'} onPress={() => setSimbolos(!simbolos)} />
         <Text style={{ fontSize: 20 }}>¿Incluir simbolos?</Text>
       </View>
       <View style={styles.checkbox}>

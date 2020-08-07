@@ -37,8 +37,6 @@ const Info: React.FC<IProps> = ({ navigation }) => {
       (supported) => {
         if (supported) {
           Linking.openURL("https://github.com/leomarazzo/PasswordApp");
-        } else {
-          console.log("Don't know how to open URI");
         }
       }
     );

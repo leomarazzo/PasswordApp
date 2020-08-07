@@ -1,12 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  ImageBackground,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { observer } from "mobx-react-lite";
 import { LogedInContext } from "../stores/LogedInStorage";
 import { Button } from "react-native-elements";
@@ -49,11 +42,11 @@ const SignUp = () => {
     }
   };
 
-  const register = () => {
+  const register = async () => {
     evaluatePassword();
     evaluateConfirm();
     if (!!password && !errorPassword && !errorConfirm) {
-      setPWD(password);
+      await setPWD(password);
       setUnlockPassword(password);
     }
   };
@@ -101,30 +94,56 @@ const SignUp = () => {
         Antes de empezar debes establecer tu contraseña maestra
       </Text>
       <PasswordInput
-        label="Ingrese la contraseña"
+        label={
+          errorPassword ? (
+            <View>
+              <Text>Ingrese la contraseña</Text>
+              <Text
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: "bold",
+                  color: "red",
+                }}
+              >
+                {errorPassword}
+              </Text>
+            </View>
+          ) : (
+            "Ingrese la contraseña"
+          )
+        }
         onEndEditing={() => evaluatePassword()}
         onChangeText={(value) => {
           setpassword(value);
           evaluatePassword();
         }}
       />
-      {errorPassword ? (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorPassword}
-        </Text>
-      ) : null}
+
       <PasswordInput
-        label="Confirme la contraseña"
+        label={
+          errorConfirm ? (
+            <View>
+              <Text>Confirme la contraseña</Text>
+              <Text
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: "bold",
+                  color: "red",
+                }}
+              >
+                {errorConfirm}
+              </Text>
+            </View>
+          ) : (
+            "Confirme la contraseña"
+          )
+        }
         onEndEditing={() => evaluateConfirm()}
         onChangeText={(value) => {
           setconfirm(value);
         }}
       />
-      {errorConfirm ? (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorConfirm}
-        </Text>
-      ) : null}
+
       <Button
         containerStyle={{
           width: "75%",

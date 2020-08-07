@@ -12,7 +12,8 @@ class LoginsStore {
 
 
   @computed get sortedLogins() {
-    return (this.logins.sort((a, b) => (a.nombre > b.nombre) ? 1 : ((a.nombre < b.nombre) ?  -1 : 0)));
+    const logins = this.logins
+    return logins.slice().sort((a, b) => (a.nombre > b.nombre) ? 1 : ((a.nombre < b.nombre) ?  -1 : 0))
   }
 
   @action createLogin = (login: ILogin, encpassword: string) => {

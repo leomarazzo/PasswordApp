@@ -17,7 +17,6 @@ export const setUnlockPassword = async (value: string) => {
         const hash = toHexString(sha256(new TextEncoder().encode(message)))
         await AsyncStorage.setItem("hash", hash);
         const ishash = (await AsyncStorage.getAllKeys()).includes("hash");
-        console.log(ishash)
     } catch (error)
     {
         
@@ -30,7 +29,7 @@ export const isSet = async () => {
         return hash
     } catch (error)
     {
-        
+        return false;
     }
 }
 
@@ -40,10 +39,7 @@ export const checkUnlockPassword = async (value: string) => {
         if (hash !== null){
             const salt = await AsyncStorage.getItem('salt');
             const message = value + salt;
-            console.log(message)
             const hash1 = toHexString(sha256(new TextEncoder().encode(message)))
-            console.log(hash)
-            console.log(hash1)
             return (hash == hash1) ? true : false
         }else{
             return false;

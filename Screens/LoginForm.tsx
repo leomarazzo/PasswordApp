@@ -139,50 +139,71 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
         }}
       />
       <Input
-        label="Identificador"
+        style={{marginBottom:3, marginTop:30}}
+        label={errorIdentificador ? (
+          <View>
+          <Text>
+            Nombre de cuenta
+          </Text>
+          <Text style={{marginTop:0, fontStyle: "italic", fontWeight: "bold", color: "red" }}>
+            {errorIdentificador}
+          </Text>
+          </View>
+        ) : "Nombre de cuenta"}
         defaultValue={identificador}
         disabled={currentLogin !== null}
         onEndEditing={() => validatIdentificador()}
         onChangeText={(value) => setIdentificador(value)}
       />
-      {!!errorIdentificador && (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorIdentificador}
-        </Text>
-      )}
       <Input
-        label="Vinculo asociado"
+        style={{marginBottom:3, marginTop:30}}
+        label={errorLink ? (
+          <View>
+          <Text>
+            Link de cuenta asociada
+          </Text>
+          <Text style={{marginTop:0, fontStyle: "italic", fontWeight: "bold", color: "red" }}>
+            {errorLink}
+          </Text>
+          </View>
+        ) : "Link de cuenta asociada"}
         defaultValue={link}
         onEndEditing={() => validarLink()}
         onChangeText={(value) => {setlink(value)}}
       />
-      {!!errorLink && (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorLink}
-        </Text>
-      )}
       <Input
-        label="Nombre de usuario"
+      style={{marginBottom:3, marginTop:30}}
+        label={errorUsername ? (
+          <View>
+          <Text>
+          Nombre de usuario
+          </Text>
+          <Text style={{marginTop:0, fontStyle: "italic", fontWeight: "bold", color: "red" }}>
+            {errorUsername}
+          </Text>
+          </View>
+        ) : "Nombre de usuario"}
         defaultValue={username}
         onEndEditing={() => validarUsuario()}
         onChangeText={(value) => {setusername(value); validarUsuario()}}
       />
-      {!!errorUsername && (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorUsername}
-        </Text>
-      )}
+      
       <PasswordInput
-        label="Contraseña"
+      style={{marginBottom:3, marginTop:30}}
+        label={errorPassword ? (
+          <View>
+          <Text>
+          Contraseña
+          </Text>
+          <Text style={{marginTop:0, fontStyle: "italic", fontWeight: "bold", color: "red" }}>
+            {errorPassword}
+          </Text>
+          </View>
+        ) : "Contraseña"}
         defaultValue={password}
         onEndEditing={() => validarContraseña()}
         onChangeText={(value) => setpassword(value)}
       />
-      {!!errorPassword && (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {errorPassword}
-        </Text>
-      )}
 
       <Button
         buttonStyle={{ marginVertical: 15, marginHorizontal: 20 }}

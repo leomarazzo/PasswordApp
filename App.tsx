@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { StyleSheet, Platform } from "react-native";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { StyleSheet, Platform, View, ActivityIndicator } from "react-native";
 import PasswordGenerate from "./Screens/PasswordGenerate";
 import { NavigationContainer } from "@react-navigation/native";
 import PasswordList from "./Screens/PasswordList";
@@ -16,20 +16,24 @@ import info from "./Screens/Info";
 export type RootDrawerParamList = {
   Passwords: undefined;
   PasswordGen: undefined;
-  Info: undefined
+  Info: undefined;
 };
 
-const App = () => {
+const App: React.FC = () => {
   const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
   const logedInStorage = useContext(LogedInContext);
   const { UnlockPassword } = logedInStorage;
   const [password, setpassword] = useState<string | null>(null);
-  const [seted, setSeted] = useState(false)
+  const [seted, setSeted] = useState<boolean | null>(null);
 
   useEffect(() => {
+    startDatabaseIfNot();
+    isSet().then((value) => {
+      setSeted(value);
+    })
     setpassword(UnlockPassword);
-  }, [UnlockPassword]);
+  }, [UnlockPassword, seted]);
 
   if (password !== null) {
     return (
@@ -38,36 +42,41 @@ const App = () => {
           <Drawer.Screen
             name="Passwords"
             component={PasswordList}
-            options={{ title: "Mis contraseñas", drawerIcon: props=> 
-              <Icon name="lock"/>
+            options={{
+              title: "Mis contraseñas",
+              drawerIcon: (props) => <Icon name="lock" />,
             }}
-
           />
           <Drawer.Screen
             name="PasswordGen"
             component={PasswordGenerate}
-            options={{ title: "Generador de contraseñas", drawerIcon: props=> 
-            <Icon name="create"/> }}
+            options={{
+              title: "Generador de contraseñas",
+              drawerIcon: (props) => <Icon name="create" />,
+            }}
           />
           <Drawer.Screen
             name="Info"
             component={info}
-            options={{ title: "Info", drawerIcon: props=> 
-            <Icon name="info"/> }}
+            options={{
+              title: "Info",
+              drawerIcon: (props) => <Icon name="info" />,
+            }}
           />
         </Drawer.Navigator>
       </NavigationContainer>
     );
   } else {
-    
-    isSet().then((value) => {
-      setSeted(value!);
-    });
-    if (seted) {
-      return <SignIn />;
-    } else {
-      startDatabaseIfNot();
-      return <SingUp />;
+    if (seted != null){
+      if (seted) {
+        return <SignIn />;
+      } else {
+        return <SingUp />;
+      }
+    }else{
+      return (<View>
+        <ActivityIndicator />
+      </View>)
     }
   }
 };

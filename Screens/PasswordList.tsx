@@ -1,21 +1,21 @@
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import {
   StyleSheet,
-  View,
-  Platform
+  View
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { LoginsContext } from "../stores/LoginsStore";
 import { Header, ListItem } from "react-native-elements";
 import CreateEditLogin from "./LoginForm";
-import ActionButton from "react-native-action-button";
+
 import { openDatabase } from "expo-sqlite";
 import { LogedInContext } from "../stores/LogedInStorage";
 import {
   useFonts,
   CarroisGothic_400Regular,
 } from "@expo-google-fonts/carrois-gothic";
+import ActionButton from "../Common/ActionButton";
 
 type ParamList = {
   Passwords: undefined;
@@ -64,6 +64,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
           leftComponent={{
             icon: "menu",
             color: "#fff",
+            style: {marginLeft: '10%', width: '10%'},
             onPress: () => {
               navigation.openDrawer();
             },
@@ -93,10 +94,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
             onPress={() => setCurrentLogin(l.nombre, UnlockPassword!)}
           />
         ))}
-        <ActionButton
-          buttonColor="rgba(231,76,60,1)"
-          onPress={() => setLoginForm(true)}
-        />
+        
       </View>
     );
   } else {

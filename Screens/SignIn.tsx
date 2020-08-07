@@ -32,46 +32,66 @@ const SignIn = () => {
     showAdd();
   }, []);
 
+  const passwordChange = (value: string) => {
+    setPassword(value);
+  };
+
   const checkPassword = () => {
     if (password.length > 0) {
-      checkUnlockPassword(password).then(res => {
+      checkUnlockPassword(password).then((res) => {
         if (res) {
           setUnlockPassword(password);
         } else {
           setPasswordError("Contraseña incorrecta");
         }
-      })
-      
+      });
     }
   };
 
   return (
     <View style={styles.container}>
       <Text
-        style={[fontsLoaded ?  {
-          fontSize: 20,
-          marginTop: 100,
-          alignContent: "center",
-          textAlign: "center",
-          fontFamily: "CarroisGothic_400Regular"
-        } : {
-          fontSize: 20,
-          marginTop: 100,
-          alignContent: "center",
-          textAlign: "center",
-        }]}
+        style={[
+          fontsLoaded
+            ? {
+                fontSize: 20,
+                marginTop: 100,
+                alignContent: "center",
+                textAlign: "center",
+                fontFamily: "CarroisGothic_400Regular",
+              }
+            : {
+                fontSize: 20,
+                marginTop: 100,
+                alignContent: "center",
+                textAlign: "center",
+              },
+        ]}
       >
         Bienvenido a PasswordApp
       </Text>
       <PasswordInput
-        label="Ingrese la contraseña"
-        onChangeText={(value) => setPassword(value)}
+        label={
+          passwordError ? (
+            <View>
+              <Text>Ingrese la contraseña</Text>
+              <Text
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: "bold",
+                  color: "red",
+                }}
+              >
+                {passwordError}
+              </Text>
+            </View>
+          ) : (
+            "Ingrese la contraseña"
+          )
+        }
+        onChangeText={(value) => passwordChange(value)}
       />
-      {passwordError ? (
-        <Text style={{ fontStyle: "italic", fontWeight: "bold", color: "red" }}>
-          {passwordError}
-        </Text>
-      ) : null}
+
       <Button
         containerStyle={{
           width: "75%",
