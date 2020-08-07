@@ -94,7 +94,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
             onPress={() => setCurrentLogin(l.nombre, UnlockPassword!)}
           />
         ))}
-        
+        <ActionButton onpress={() => setLoginForm(true)}/>
       </View>
     );
   } else {

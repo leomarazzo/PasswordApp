@@ -6,6 +6,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
@@ -72,7 +73,7 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
   const writeToClipboard = async (password: string) => {
     if (password.length > 0) {
       Clipboard.setString(password);
-      alert("Copied to Clipboard!");
+      Alert.alert("Copiado","Copiado al portapapeles");
     }
   };
 
