@@ -64,7 +64,6 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
           leftComponent={{
             icon: "menu",
             color: "#fff",
-            style: {marginLeft: '10%', width: '10%'},
             onPress: () => {
               navigation.openDrawer();
             },
