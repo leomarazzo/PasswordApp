@@ -89,7 +89,7 @@ const Info: React.FC<IProps> = ({ navigation }) => {
             marginTop:20
           }}
         >
-          El codigo fuente de la misma se encuentra
+          El codigo fuente de la App se encuentra
         </Text>
         <Text style={{
             fontSize: 17,

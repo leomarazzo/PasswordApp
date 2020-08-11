@@ -1,6 +1,7 @@
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import {
   StyleSheet,
+  ScrollView,
   View
 } from "react-native";
 import React, { useContext, useEffect } from "react";
@@ -80,7 +81,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
             ],
           }}
         />
-        
+        <ScrollView >
         {sortedLogins.map((l, i) => (
           <ListItem
             key={l.nombre}
@@ -93,6 +94,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
             onPress={() => setCurrentLogin(l.nombre, UnlockPassword!)}
           />
         ))}
+        </ScrollView>
         <ActionButton onpress={() => setLoginForm(true)}/>
       </View>
     );

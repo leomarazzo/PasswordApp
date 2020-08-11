@@ -3,7 +3,7 @@
     "name": "PaswordApp",
     "description": "Aplicacion para almacenamiento seguro de contraseñas",
     "slug": "PaswordApp",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "githubUrl": "https://github.com/leomarazzo/PasswordApp",
@@ -30,7 +30,7 @@
         "backgroundColor": "#8c8b8b",
         "foregroundImage": "./assets/icon.png"
       },
-      "versionCode": 1,
+      "versionCode": 3,
       "permissions": [],
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-1461193511253828~5983027293",
