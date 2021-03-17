@@ -7,7 +7,7 @@ import {
 import React, { useContext, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { LoginsContext } from "../stores/LoginsStore";
-import { Header, ListItem } from "react-native-elements";
+import { Header, ListItem, Icon } from "react-native-elements";
 import CreateEditLogin from "./LoginForm";
 
 import { openDatabase } from "expo-sqlite";
@@ -62,13 +62,12 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
       <View style={styles.container}>
         <Header
           containerStyle={{ backgroundColor: "#8c8b8b" }}
-          leftComponent={{
-            icon: "menu",
-            color: "#fff",
-            onPress: () => {
-              navigation.openDrawer();
-            },
-          }}
+          leftComponent={ <Icon
+            name="menu"
+            color="#fff"
+            containerStyle={{marginLeft: 10}}
+            onPress={() => navigation.openDrawer()}
+          />}
           centerComponent={{
             text: "Mis contraseñas",
             style: [
@@ -106,7 +105,7 @@ const PasswordList: React.FC<IProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
+    
   },
   item: {
     padding: 10,

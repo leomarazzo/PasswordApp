@@ -7,17 +7,20 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  BackHandler,
 } from "react-native";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { Header } from "react-native-elements";
+import { Header, Icon } from "react-native-elements";
 import InputSpinner from "react-native-input-spinner";
 import { generatePassword } from "../Utils/PasswordGenerator";
 import {Checkbox} from "react-native-paper"
+import { LoginsContext } from "../stores/LoginsStore";
 
 type ParamList = {
   Passwords: undefined;
   PasswordGen: undefined;
+  Info: undefined;
 };
 
 type ProfileScreenNavigationProp = DrawerNavigationProp<ParamList>;
@@ -60,6 +63,23 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
   const [simbolos, setSimbolos] = useState(true);
   const [password, setPassword] = useState("");
   const [length, setLength] = useState(8);
+  const {setLoginForm} = useContext(LoginsContext);
+
+  const salir = () => {
+    setLoginForm(false);
+    navigation.jumpTo("Passwords");
+  }
+
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      salir();
+      return true;
+    })
+
+    return () => backHandler.remove();
+  }, []);
+
 
   const genPassword = () => {
     if (!minus && !mayus && !nums && !simbolos) {
@@ -81,17 +101,13 @@ const PasswordGenerate: React.FC<IProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Header
         containerStyle={{ marginBottom: 30, backgroundColor: "#8c8b8b" }}
-        leftComponent={{
-          icon: "menu",
-          color: "#fff",
-          onPress: () => {
-            navigation.openDrawer();
-          },
-        }}
-        centerComponent={{
-          text: "Generador de contraseña",
-          style: { color: "#fff", fontSize: 20 },
-        }}
+        leftComponent={ <Icon
+          name="menu"
+          color="#fff"
+          containerStyle={{marginLeft: 10}}
+          onPress={() => navigation.openDrawer()}
+        />}
+        centerComponent={<Text style={{color: "#fff", fontSize: 25, textAlign:"center"}}>Generador de contraseña</Text>}
       />
       <View style={styles.checkbox}>
         <Checkbox status={mayus ? 'checked' : 'unchecked'} onPress={() => setMayus(!mayus)} />

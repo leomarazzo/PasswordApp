@@ -9,6 +9,7 @@ import {
   Modal,
   Alert,
   TouchableHighlight,
+  BackHandler,
 } from "react-native";
 import { LoginsContext } from "../stores/LoginsStore";
 import { Input, Header, Button, Icon } from "react-native-elements";
@@ -67,6 +68,10 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
     }
   };
 
+  const salir = () => {
+    setLoginForm(false);
+  };
+
   const validarLink = () => {
     if (
       link &&
@@ -97,12 +102,20 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
   };
 
   useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        salir();
+        return true;
+      }
+    );
     if (currentLogin !== null) {
       setIdentificador(currentLogin.nombre);
       setlink(currentLogin.link !== undefined ? currentLogin.link : "");
       setusername(currentLogin.username);
       setpassword(currentLogin.password);
     }
+    return () => backHandler.remove();
   }, []);
 
   const handleGuardar = () => {
@@ -134,9 +147,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : undefined}
-    >
+    <View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -161,7 +172,16 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
       </Modal>
 
       <Header
-        containerStyle={{ backgroundColor: "#8c8b8b", marginBottom:20 }}
+        containerStyle={{ backgroundColor: "#8c8b8b", marginBottom: 30 }}
+        leftComponent={
+          <Icon
+            name="ios-arrow-back"
+            type="ionicon"
+            color="#fff"
+            containerStyle={{marginLeft: 10}}
+            onPress={() => salir()}
+          />
+        }
         centerComponent={{
           text:
             currentLogin !== null ? "Editar contraseña" : "Nueva constraseña",
@@ -174,12 +194,70 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
               : { fontSize: 20 },
           ],
         }}
+        rightComponent={{
+          text: "Guardar",
+
+          disabled:
+            !identificador ||
+            !!errorIdentificador ||
+            !!errorLink ||
+            !username ||
+            !!errorUsername ||
+            !password ||
+            !!errorPassword,
+          style: { fontSize: 15, color: "#fff", borderLeftColor: "#4fc6e0", borderLeftWidth: 1, height: '100%', paddingTop: '20%', paddingLeft: 10},
+          onPress: () => {
+            handleGuardar();
+          },
+        }}
       />
-      <ScrollView>
-        <Input
-          label={
-            errorIdentificador ? (
-              <View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
+        <ScrollView>
+          <Input
+            label={
+              errorIdentificador ? (
+                <View>
+                  <View style={{ flex: 2, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        fontsLoaded
+                          ? {
+                              fontSize: 20,
+                              fontFamily: "CarroisGothic_400Regular",
+                              fontWeight: "900",
+                              color: "#8c8b8b",
+                              marginRight: 10,
+                            }
+                          : { fontSize: 20 },
+                      ]}
+                    >
+                      Nombre de cuenta
+                    </Text>
+                    <Icon
+                      name="help-outline"
+                      color="#4fc6e0"
+                      onPress={() => {
+                        setModalText(
+                          "Este es el nombre que verás en la lista de tus cuentas"
+                        );
+                        setModalVisible(true);
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      marginTop: 0,
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                  >
+                    {errorIdentificador}
+                  </Text>
+                </View>
+              ) : (
                 <View style={{ flex: 3, flexDirection: "row" }}>
                   <Text
                     style={[
@@ -207,56 +285,57 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                     }}
                   />
                 </View>
-                <Text
-                  style={{
-                    marginTop: 0,
-                    fontStyle: "italic",
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  {errorIdentificador}
-                </Text>
-              </View>
-            ) : (
-              <View style={{ flex: 3, flexDirection: "row" }}>
-                <Text
-                  style={[
-                    fontsLoaded
-                      ? {
-                          fontSize: 20,
-                          fontFamily: "CarroisGothic_400Regular",
-                          fontWeight: "900",
-                          color: "#8c8b8b",
-                          marginRight: 10,
-                        }
-                      : { fontSize: 20 },
-                  ]}
-                >
-                  Nombre de cuenta
-                </Text>
-                <Icon
-                  name="help-outline"
-                  onPress={() => {
-                    setModalText(
-                      "Este es el nombre que verás en la lista de tus cuentas"
-                    );
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            )
-          }
-          defaultValue={identificador}
-          disabled={currentLogin !== null}
-          onEndEditing={() => validatIdentificador()}
-          onChangeText={(value) => setIdentificador(value)}
-        />
+              )
+            }
+            defaultValue={identificador}
+            disabled={currentLogin !== null}
+            onEndEditing={() => validatIdentificador()}
+            onChangeText={(value) => setIdentificador(value)}
+          />
 
-        <Input
-          label={
-            errorLink ? (
-              <View>
+          <Input
+            label={
+              errorLink ? (
+                <View>
+                  <View style={{ flex: 3, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        fontsLoaded
+                          ? {
+                              fontSize: 20,
+                              fontFamily: "CarroisGothic_400Regular",
+                              fontWeight: "900",
+                              color: "#8c8b8b",
+                              marginRight: 10,
+                            }
+                          : { fontSize: 20 },
+                      ]}
+                    >
+                      Link
+                    </Text>
+                    <Icon
+                      name="help-outline"
+                      color="#4fc6e0"
+                      onPress={() => {
+                        setModalText(
+                          "Este es el link de la pagina web o app a la que corresponde tu cuenta"
+                        );
+                        setModalVisible(true);
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      marginTop: 0,
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                  >
+                    {errorLink}
+                  </Text>
+                </View>
+              ) : (
                 <View style={{ flex: 3, flexDirection: "row" }}>
                   <Text
                     style={[
@@ -275,6 +354,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                   </Text>
                   <Icon
                     name="help-outline"
+                    color="#4fc6e0"
                     onPress={() => {
                       setModalText(
                         "Este es el link de la pagina web o app a la que corresponde tu cuenta"
@@ -283,56 +363,57 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                     }}
                   />
                 </View>
-                <Text
-                  style={{
-                    marginTop: 0,
-                    fontStyle: "italic",
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  {errorIdentificador}
-                </Text>
-              </View>
-            ) : (
-              <View style={{ flex: 3, flexDirection: "row" }}>
-                <Text
-                  style={[
-                    fontsLoaded
-                      ? {
-                          fontSize: 20,
-                          fontFamily: "CarroisGothic_400Regular",
-                          fontWeight: "900",
-                          color: "#8c8b8b",
-                          marginRight: 10,
-                        }
-                      : { fontSize: 20 },
-                  ]}
-                >
-                  Link
-                </Text>
-                <Icon
-                  name="help-outline"
-                  onPress={() => {
-                    setModalText(
-                      "Este es el link de la pagina web o app a la que corresponde tu cuenta"
-                    );
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            )
-          }
-          defaultValue={link}
-          onEndEditing={() => validarLink()}
-          onChangeText={(value) => {
-            setlink(value);
-          }}
-        />
-        <Input
-          label={
-            errorUsername ? (
-              <View>
+              )
+            }
+            defaultValue={link}
+            onEndEditing={() => validarLink()}
+            onChangeText={(value) => {
+              setlink(value);
+            }}
+          />
+          <Input
+            label={
+              errorUsername ? (
+                <View>
+                  <View style={{ flex: 3, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        fontsLoaded
+                          ? {
+                              fontSize: 20,
+                              fontFamily: "CarroisGothic_400Regular",
+                              fontWeight: "900",
+                              color: "#8c8b8b",
+                              marginRight: 10,
+                            }
+                          : { fontSize: 20 },
+                      ]}
+                    >
+                      Nombre de usuario
+                    </Text>
+                    <Icon
+                      name="help-outline"
+                      color="#4fc6e0"
+                      onPress={() => {
+                        setModalText(
+                          "Este es el nombre de usuario con el que inicias sesión"
+                        );
+                        setModalVisible(true);
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      marginTop: 0,
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                  >
+                    {errorUsername}
+                  </Text>
+                </View>
+              ) : (
                 <View style={{ flex: 3, flexDirection: "row" }}>
                   <Text
                     style={[
@@ -351,6 +432,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                   </Text>
                   <Icon
                     name="help-outline"
+                    color="#4fc6e0"
                     onPress={() => {
                       setModalText(
                         "Este es el nombre de usuario con el que inicias sesión"
@@ -359,58 +441,59 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                     }}
                   />
                 </View>
-                <Text
-                  style={{
-                    marginTop: 0,
-                    fontStyle: "italic",
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  {errorIdentificador}
-                </Text>
-              </View>
-            ) : (
-              <View style={{ flex: 3, flexDirection: "row" }}>
-                <Text
-                  style={[
-                    fontsLoaded
-                      ? {
-                          fontSize: 20,
-                          fontFamily: "CarroisGothic_400Regular",
-                          fontWeight: "900",
-                          color: "#8c8b8b",
-                          marginRight: 10,
-                        }
-                      : { fontSize: 20 },
-                  ]}
-                >
-                  Nombre de usuario
-                </Text>
-                <Icon
-                  name="help-outline"
-                  onPress={() => {
-                    setModalText(
-                      "Este es el nombre de usuario con el que inicias sesión"
-                    );
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            )
-          }
-          defaultValue={username}
-          onEndEditing={() => validarUsuario()}
-          onChangeText={(value) => {
-            setusername(value);
-            validarUsuario();
-          }}
-        />
+              )
+            }
+            defaultValue={username}
+            onEndEditing={() => validarUsuario()}
+            onChangeText={(value) => {
+              setusername(value);
+              validarUsuario();
+            }}
+          />
 
-        <PasswordInput
-          label={
-            errorPassword ? (
-              <View>
+          <PasswordInput
+            label={
+              errorPassword ? (
+                <View>
+                  <View style={{ flex: 3, flexDirection: "row" }}>
+                    <Text
+                      style={[
+                        fontsLoaded
+                          ? {
+                              fontSize: 20,
+                              fontFamily: "CarroisGothic_400Regular",
+                              fontWeight: "900",
+                              color: "#8c8b8b",
+                              marginRight: 10,
+                            }
+                          : { fontSize: 20 },
+                      ]}
+                    >
+                      Password
+                    </Text>
+                    <Icon
+                      name="help-outline"
+                      color="#4fc6e0"
+                      onPress={() => {
+                        setModalText(
+                          "Esta es la contraseña que utilizas para iniciar sesion y que quieres guardar"
+                        );
+                        setModalVisible(true);
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      marginTop: 0,
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                  >
+                    {errorPassword}
+                  </Text>
+                </View>
+              ) : (
                 <View style={{ flex: 3, flexDirection: "row" }}>
                   <Text
                     style={[
@@ -429,6 +512,7 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                   </Text>
                   <Icon
                     name="help-outline"
+                    color="#4fc6e0"
                     onPress={() => {
                       setModalText(
                         "Esta es la contraseña que utilizas para iniciar sesion y que quieres guardar"
@@ -437,87 +521,29 @@ const CreateEditLogin: React.FC<IProps> = ({ navigation }) => {
                     }}
                   />
                 </View>
-                <Text
-                  style={{
-                    marginTop: 0,
-                    fontStyle: "italic",
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  {errorIdentificador}
-                </Text>
-              </View>
-            ) : (
-              <View style={{ flex: 3, flexDirection: "row" }}>
-                <Text
-                  style={[
-                    fontsLoaded
-                      ? {
-                          fontSize: 20,
-                          fontFamily: "CarroisGothic_400Regular",
-                          fontWeight: "900",
-                          color: "#8c8b8b",
-                          marginRight: 10,
-                        }
-                      : { fontSize: 20 },
-                  ]}
-                >
-                  Nombre de cuenta
-                </Text>
-                <Icon
-                  name="help-outline"
-                  onPress={() => {
-                    setModalText(
-                      "Esta es la contraseña que utilizas para iniciar sesion y que quieres guardar"
-                    );
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            )
-          }
-          defaultValue={password}
-          onEndEditing={() => validarContraseña()}
-          onChangeText={(value) => setpassword(value)}
-        />
-
-        <Button
-          buttonStyle={{ marginVertical: 15, marginHorizontal: 20 }}
-          disabled={
-            !identificador ||
-            !!errorIdentificador ||
-            !!errorLink ||
-            !username ||
-            !!errorUsername ||
-            !password ||
-            !!errorPassword
-          }
-          title="Guardar"
-          onPress={() => handleGuardar()}
-        />
-        <Button
-          buttonStyle={{ marginVertical: 15, marginHorizontal: 20 }}
-          title="Salir"
-          type="outline"
-          onPress={() => setLoginForm(false)}
-        />
-
-        {currentLogin !== null && (
-          <Button
-            buttonStyle={{
-              marginVertical: 10,
-              marginHorizontal: 20,
-              borderColor: "red",
-            }}
-            titleStyle={{ color: "red" }}
-            type="outline"
-            title="Borrar"
-            onPress={() => handleBorrar()}
+              )
+            }
+            defaultValue={password}
+            onEndEditing={() => validarContraseña()}
+            onChangeText={(value) => setpassword(value)}
           />
-        )}
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+          {currentLogin !== null && (
+            <Button
+              buttonStyle={{
+                marginVertical: 10,
+                marginHorizontal: 20,
+                borderColor: "red",
+              }}
+              titleStyle={{ color: "red" }}
+              type="outline"
+              title="Borrar"
+              onPress={() => handleBorrar()}
+            />
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 

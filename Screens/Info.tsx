@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   Linking,
   Image,
+  BackHandler,
 } from "react-native";
 import {
   useFonts,
   CarroisGothic_400Regular,
 } from "@expo-google-fonts/carrois-gothic";
-import { Header } from "react-native-elements";
+import { Header, Icon } from "react-native-elements";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { LoginsContext } from "../stores/LoginsStore";
 
 type ParamList = {
   Passwords: undefined;
@@ -31,6 +33,22 @@ interface IProps {
 
 const Info: React.FC<IProps> = ({ navigation }) => {
   const [fontsLoaded] = useFonts({ CarroisGothic_400Regular });
+  const {setLoginForm} = useContext(LoginsContext);
+
+  const salir = () => {
+    setLoginForm(false);
+    navigation.jumpTo("Passwords");
+  }
+
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      salir();
+      return true;
+    })
+
+    return () => backHandler.remove();
+  }, []);
 
   const handleClick = () => {
     Linking.canOpenURL("https://github.com/leomarazzo/PasswordApp").then(
@@ -46,13 +64,12 @@ const Info: React.FC<IProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Header
         containerStyle={{ backgroundColor: "#8c8b8b" }}
-        leftComponent={{
-          icon: "menu",
-          color: "#fff",
-          onPress: () => {
-            navigation.openDrawer();
-          },
-        }}
+        leftComponent={ <Icon
+          name="menu"
+          color="#fff"
+          containerStyle={{marginLeft: 10}}
+          onPress={() => navigation.openDrawer()}
+        />}
         centerComponent={{
           text: "Mis contraseñas",
           style: [
